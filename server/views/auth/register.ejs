@@ -1,7 +1,7 @@
 <%-include ('../partials/header.ejs');%>
 <%-include ('../partials/main_nav.ejs');%>
   
-<main class="container">
+<main class="container" style="background-color: lavender;font-family: Verdana, Geneva, Tahoma, sans-serif;">
     <!--message Area-->
     <% if (messages.length>0){%>
         <div class="alert alert-danger">
@@ -13,13 +13,13 @@
                     <h1>Please Register</h1>
                     <form method="POST" autocomplete="off">
                         <fieldset class="form-group">
-                            <label for="username">username:</label>
+                            <label for="username">Username:</label>
                             <input type="text" class="form-control"
                             name="username"
                             placeholder = "Enter username"
                             id ="username" required autofocus>
                             </fieldset>
-
+                            <br>
                             <fieldset class="form-group">
                                 <label for="password">Password:</label>
                                 <input type="password" class="form-control"
@@ -29,7 +29,7 @@
                                 <!--or
                                 <a href="/register">Register Here</a>-->
                                 </fieldset>
-
+                                <br>
                                 <fieldset class="form-group">
                                     <label for="email">Email:</label>
                                     <input type="email" class="form-control"
@@ -37,19 +37,19 @@
                                     placeholder = "Enter email Address"
                                     id ="email" required>
                                     </fieldset>
-                                    
+                                    <br>
                                     <fieldset class="form-group">
-                                        <label for="displayName">display Name:</label>
+                                        <label for="displayName">Display name:</label>
                                         <input type="text" class="form-control"
                                         name="displayName"
                                         placeholder = "Enter displayName"
                                         id ="displayName" required>
                                         </fieldset>
-            
+                                        <br>
                                 <fieldset class="form-group text-right">
                                     <input type="submit" class="btn btn-success" value="Register">
                                     <a href="/">
-                                   <input type="button" class="btn btn-warning" value="cancel">
+                                   <input type="button" class="btn btn-warning" value="Cancel">
                                     </a>
                                     </fieldset>
                         </form>

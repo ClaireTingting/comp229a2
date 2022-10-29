@@ -3,9 +3,14 @@ let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+let cors = require('cors');
+let passport  =require('passport');
+let passportJWT = require('passport-jwt');
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
 //modules for authentication
 let session = require('express-session');
-let passport = require('passport');
+// let passport = require('passport');
 let passportLocal = require('passport-local');
 let localStrategy = passportLocal.Strategy;
 let flash = require('connect-flash');
@@ -43,11 +48,8 @@ app.use(express.static(path.join(__dirname, '../../node_modules')));
 app.use(session({
   secret:'SomeSecret',
   saveUninitialized:false,
-<<<<<<< HEAD
-  resave:false
-=======
+  //resave:false
   reSave:false
->>>>>>> 6fe48f3c64e315231db0268ff2db189540e2d78e
 }));
 
 //initialize flash
@@ -64,6 +66,21 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+let jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = db.Secret;
+let strategy = new JWTStrategy(jwtOptions,(jwt_payload,done)=>{
+  User.findById(jwt_payload.id)
+  .then(User=>{
+    return done(null,User);
+  })
+  .catch(err=>{
+    return done(err,false);
+  })
+
+});
+passport.use(strategy);
+//routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bookList',booksRouter);

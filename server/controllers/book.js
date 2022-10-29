@@ -1,6 +1,7 @@
 let express = require ('express');
 let router = express.Router();
 let mongoose = require('mongoose');
+let jwt = require('jsonwebtoken');
 let Book = require('../model/books');
 module.exports.displayBookList = (req,res,next)=>{
     Book.find((err,bookList)=>{
@@ -11,23 +12,24 @@ module.exports.displayBookList = (req,res,next)=>{
         else
         {
          //console.log(BookList);
-         res.render('book/list', {title:'Books', BookList:bookList});
+         res.render('book/list', 
+         {title:'Books', BookList:bookList,
+        displayName:req.user ? req.user.displayName:''});
         }
     });
 }
 
 module.exports.displayAddPage = (req,res,next)=>{
-    res.render('book/add',{title:'Add Book'})
+    res.render('book/add',{title:'Add Book',
+    displayName:req.user ? req.user.displayName:''})
 
 }
 
 module.exports.processAddPage = (req,res,next)=>{
     let newBook = Book({
         "name": req.body.name,
-        "author":req.body.author,
-        "published":req.body.published,
-        "description":req.body.description,
-        "price":req.body.price
+        "email":req.body.email,
+        "telnumber":req.body.telnumber
     });
     Book.create(newBook,(err,Book)=>{
         if(err)
@@ -52,11 +54,12 @@ module.exports.processAddPage = (req,res,next)=>{
                 }
                 else
                 {
-                    res.render('book/edit',{title:'Edit Book', book: bookToEdit});
-                    
+                    res.render('book/edit',{title:'Edit Book', book: bookToEdit,
+                    displayName:req.user ? req.user.displayName:''});
                 }
+            
             });
-            }
+        }
 
         module.exports.processEditPage = (req,res,next)=>{
             let id = req.params.id
@@ -64,10 +67,8 @@ module.exports.processAddPage = (req,res,next)=>{
             let updatedBook = Book({
                 "_id":id,
                 "name":req.body.name,
-                "author":req.body.author,
-                "published":req.body.published,
-                "description":req.body.description,
-                "price":req.body.price
+                "email":req.body.email,
+                "telnumber":req.body.telnumber
             });
             Book.updateOne({_id:id}, updatedBook,(err)=>{
                 if(err)
@@ -94,5 +95,7 @@ module.exports.processAddPage = (req,res,next)=>{
                 {
                     res.redirect('/bookList');
                 }
+                
             });
             }
+        
